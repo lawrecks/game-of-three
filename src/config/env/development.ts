@@ -2,5 +2,5 @@ import 'dotenv/config';
 
 export default {
   HOST: process.env.HOST,
-  API_VERSION: process.env.API_VERSION,
+  SOCKET_PORT: process.env.SOCKET_PORT
 };
