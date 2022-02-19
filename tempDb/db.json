@@ -1,0 +1,13 @@
+{
+  "users": [],
+  "rooms": [
+    {
+      "name": "Room Paris",
+      "id": 1
+    },
+    {
+      "name": "Room Berlin",
+      "id": 2
+    }
+  ]
+}

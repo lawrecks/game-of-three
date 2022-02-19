@@ -1,11 +1,14 @@
-import express from "express";
-import config from "./config";
+import express from 'express';
+import * as http from 'http';
+import config from './config';
+import socketConnection from './socket';
 
-const app = express();
+const app = http.createServer(express);
 const host = config.HOST;
-const port = config.PORT || 8080;
-const apiVersion = config.API_VERSION;
+const port = config.SOCKET_PORT || 8080;
+
+socketConnection(app);
 
 app.listen(port, () => {
-  console.log(`Server started at ${host}:${port}/api/${apiVersion}/`);
+  console.log(`Socket connection started at ${host}:${port}`);
 });
