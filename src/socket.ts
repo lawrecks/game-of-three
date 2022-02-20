@@ -23,28 +23,29 @@ export default (app: any) => {
     });
 
     /* Create or join room for user*/
-    socket.on('joinRoom', async ({ room, username }) => {
+    socket.on('joinRoom', async ({ room, username, roomType }) => {
       try {
         console.log('userId', socket.id);
-
-        await apiService.assignRoomToUser(room, username);
-        socket.emit('message', {
-          room,
-          message: `Welcome to the room, ${room}`,
-          socketId: socket.id,
-        });
-        socket.broadcast.to(room).emit('message', {
-          user: username,
-          message: `${username} has joined ${room}`,
-          room: room,
-        });
-        const maxUsers = 2;
-
-        socket.join(room, () => {
-          if (io.nsps['/'].adapter.rooms[room]?.length === maxUsers) {
-            io.to(room).emit('onReady', { state: true });
-          }
-        });
+        const maxUsers = roomType === 'cpu' ? 1 : 2;
+        if (io.nsps['/'].adapter.rooms[room]?.length < maxUsers) {
+          await apiService.assignRoomToUser(room, username, roomType);
+          socket.emit('message', {
+            room,
+            message: `Welcome to the room, ${room}`,
+            socketId: socket.id,
+          });
+          socket.broadcast.to(room).emit('message', {
+            user: username,
+            message: `${username} has joined ${room}`,
+            room: room,
+          });
+          socket.join(room);
+        } else {
+          socket.emit('message', {
+            room,
+            message: `Room has reached it's limit, ${room}`,
+          });
+        }
       } catch (error: any) {
         socket.emit('fail', {
           message: `Unable to join room, ${error.message}`,
@@ -98,6 +99,33 @@ export default (app: any) => {
 
         const finalResult = calculateFinalResult(numbers, number);
 
+        if (user.roomType === 'cpu') {
+          setTimeout(() => {
+            const randomNumbers = [1, 0, -1];
+            const randomCPU =
+            randomNumbers[Math.floor(Math.random() * randomNumbers.length)];
+            const combinedNumbers = [randomCPU, finalResult];
+            const CPUResult = calculateFinalResult(combinedNumbers, finalResult);
+            io.to(user.room).emit('randomNumber', {
+              number: calculateFinalResult(combinedNumbers, finalResult),
+              isFirst: false,
+              user: 'CPU',
+              selectedNumber: randomCPU,
+              isCorrectResult: CPUResult == finalResult ? false : true,
+            });
+
+            io.to(user.room).emit('activateYourTurn', {
+              user: socket.id,
+              state: 'PLAY',
+            });
+            if (calculateFinalResult(combinedNumbers, finalResult) === 1) {
+              io.to(user.room).emit('gameOver', {
+                user: 'CPU',
+                isOver: true,
+              });
+            }
+          }, 2000);
+        }
         io.to(user?.room).emit('randomNumber', {
           number: finalResult,
           user: user?.name,
@@ -111,7 +139,6 @@ export default (app: any) => {
           state: 'WAIT',
         });
 
-        /* emit GameOver if 1 is reached*/
         if (finalResult == 1) {
           io.to(user?.room).emit('gameOver', {
             user: user?.name,
@@ -143,7 +170,6 @@ export default (app: any) => {
         await apiService.removeUserFromRoom(socket.id);
         socket.leave(user?.room);
         await apiService.deleteUser(socket.id);
-        socket.broadcast.emit("listTrigger", `${true}`);
       } catch (error: any) {
         socket.emit('fail', {
           message: `Unable to disconnect, ${error.message}`,

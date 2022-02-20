@@ -40,13 +40,14 @@ export const findOrCreateUser = async (id: string, name: string, room: string = 
       id,
       name,
       room,
+      roomType: ''
     });
     return newUser.data;
   }
   return user;
 };
 
-export const assignRoomToUser = async (roomName: string, username: string) => {
+export const assignRoomToUser = async (roomName: string, username: string, type: string) => {
   // Check if user exists
   const user = await userExists(username);
   const room = await roomExists(roomName);
@@ -57,11 +58,13 @@ export const assignRoomToUser = async (roomName: string, username: string) => {
   if (!room) {
     await axios.post(`${baseURL}/rooms`, {
       name: roomName,
+      type,
     });
   }
   // Update user room details
   await axios.patch(`${baseURL}/users/${user.id}`, {
     room: roomName,
+    roomType: type,
   });
   return user;
 };

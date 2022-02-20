@@ -2,12 +2,14 @@
   "users": [],
   "rooms": [
     {
+      "id": 1,
       "name": "Room Paris",
-      "id": 1
+      "type": "cpu"
     },
     {
+      "id": 2,
       "name": "Room Berlin",
-      "id": 2
+      "type": "player"
     }
   ]
 }
