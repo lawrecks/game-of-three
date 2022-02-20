@@ -12,7 +12,7 @@ https://drive.google.com/file/d/16yjUgcy1Wl4HrUtj3yfQocwVBUEuxV7J/view?usp=shari
 
 ## Built With
 
-- Node.js
+- Node.js (Typescript)
 - Git
 - Express
 - Socket.io
