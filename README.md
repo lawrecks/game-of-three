@@ -7,6 +7,9 @@ An application that provides a server side for a game (description below) with s
 When a player starts, they incept a random (whole) number and send it to the second player as an approach of starting the game. The receiving player can then choose between adding one of {-1,0,1} in order to get to a number that is divisible by 3. The resulting whole number is then sent back to the original sender.
 ​The same rules are applied until one player reaches the number 1 (after the division).
 
+### Technical Diagram
+https://drive.google.com/file/d/16yjUgcy1Wl4HrUtj3yfQocwVBUEuxV7J/view?usp=sharing
+
 ## Built With
 
 - Node.js
@@ -57,9 +60,6 @@ It sends the number back to the client with the selected move choice ( 1, 0 or -
 ### Entities
 Fetch all users - `{{JsonServer_URL}}/users` [GET] <br>
 Fetch all rooms - `{{JsonServer_URL}}/rooms` [GET]
-
-### Technical Diagram
-https://drive.google.com/file/d/16yjUgcy1Wl4HrUtj3yfQocwVBUEuxV7J/view?usp=sharing
 
 ## Show your support
 Give a ⭐️ &nbsp;if you like this project!
