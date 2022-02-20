@@ -24,19 +24,18 @@ In your root folder where the repository is cloned, run the following commands:
  - Starting the temp DB JsonServer: `npm run start:server` 
  - Open a new terminal and type: `npm run dev`. This will establish the socket connection 
 
-## Broadcast Events from Server => Client
+## Broadcast Events from Server
  -  **`randomNumber`**
  -  **`YourTurn`**
  -  **`gameOver`**
  -  **`fail`**
  - **`message`**
- - **`listTrigger`**
 
 ## Listened events on the Server
 - **`connection`**
-- **`login`**
-- **`joinRoom`**
-- **`sendNumber`**
+- **`login`** (required data: username)
+- **`joinRoom`** (required data: username, room, roomType)
+- **`sendNumber`** (required data: number, newNumber)
 - **`leaveRoom`**
 - **`startGame`**
 
@@ -59,7 +58,8 @@ It sends the number back to the client with the selected move choice ( 1, 0 or -
 Fetch all users - `{{JsonServer_URL}}/users` [GET] <br>
 Fetch all rooms - `{{JsonServer_URL}}/rooms` [GET]
 
+### Technical Diagram
+https://drive.google.com/file/d/16yjUgcy1Wl4HrUtj3yfQocwVBUEuxV7J/view?usp=sharing
 
 ## Show your support
-
-Give a ⭐️ if you like this project!
+Give a ⭐️ &nbsp;if you like this project!
